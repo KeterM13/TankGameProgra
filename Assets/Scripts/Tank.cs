@@ -14,7 +14,7 @@ public class Tank : MonoBehaviour
     public Vector3 initialPos;
     public bool hasDie=false;
     int health = 5;
-
+    int tankIndex;
     // Start is called before the first frame update
     void Start()
     {
@@ -37,6 +37,10 @@ public class Tank : MonoBehaviour
         initialPos = position;
        
         
+    }
+    public void SetIndex(int index)
+    {
+        tankIndex = index;
     }
 
     public void Fire(InputAction.CallbackContext callbackContext)
