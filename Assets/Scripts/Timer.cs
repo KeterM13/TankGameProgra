@@ -6,13 +6,21 @@ using TMPro;
 
 public class Timer : MonoBehaviour
 {
+    public static Timer instance;
     public float time;
     public bool isCountdown;
     public TextMeshProUGUI timerText;
     public UnityAction finishCountDown;
+
+    private void OnDestroy()
+    {
+        instance = null;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
+        instance = this;
         
     }
 
@@ -24,7 +32,7 @@ public class Timer : MonoBehaviour
             time -= Time.deltaTime;
             if(time<0)
             {
-                Debug.Log("Se acabo el tiempo");
+                finishCountDown();
             }
         }
         else
@@ -32,6 +40,6 @@ public class Timer : MonoBehaviour
             time += Time.deltaTime;
         }
 
-        Debug.Log($"{time:00.00}");
+       // Debug.Log($"{time:00.00}");
     }
 }

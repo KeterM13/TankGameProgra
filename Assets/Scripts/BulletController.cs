@@ -8,8 +8,10 @@ public class BulletController : MonoBehaviour
     Vector3 bulletMovement;
     public Rigidbody rb;
     public int damage = 1;
+    public int shootingTankIndex;
+    public GameObject shootingTank;
 
-     void Start()
+    void Start()
     {
         rb.velocity = transform.forward * speed;
     }
@@ -20,7 +22,8 @@ public class BulletController : MonoBehaviour
       Tank tank =  hit.GetComponent<Tank>();
         if(tank!= null)
         {
-            tank.Damage(damage);
+            if (tank.gameObject == shootingTank) return;
+            tank.Damage(damage, shootingTankIndex);
         }
         Destroy(gameObject);
     }

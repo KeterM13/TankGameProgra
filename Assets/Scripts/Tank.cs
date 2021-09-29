@@ -5,7 +5,8 @@ using UnityEngine.InputSystem;
 
 public class Tank : MonoBehaviour
 {
-    public Vector3 spawnPosition;
+    Vector3 spawnPosition;
+    Quaternion spawnRotation;
     Vector2 tankMovementSpeed;
     public float tankSpeed = 1f;
     public float tankRotSpeed = 10f;
@@ -15,6 +16,7 @@ public class Tank : MonoBehaviour
     public bool hasDie=false;
     int health = 5;
     int tankIndex;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -30,13 +32,20 @@ public class Tank : MonoBehaviour
         
     }
 
-    public void SetInitialPos(Vector3 position)
+    public void ReturnToInitialPos()
+    {
+        transform.SetPositionAndRotation(spawnPosition, spawnRotation);
+    }
+
+
+
+    public void SetInitialPos(Vector3 position, Quaternion rotation)
     {
         spawnPosition = position;
-        transform.position = position;
-        initialPos = position;
-       
-        
+        spawnRotation = rotation;
+        ReturnToInitialPos();
+
+
     }
     public void SetIndex(int index)
     {
@@ -49,6 +58,7 @@ public class Tank : MonoBehaviour
         if (callbackContext.phase != InputActionPhase.Started) return;
 
         ShootBullet();
+
     }
 
     public void Move(InputAction.CallbackContext context)
@@ -63,15 +73,16 @@ public class Tank : MonoBehaviour
         Instantiate(shell, bulletShooter.position, bulletShooter.rotation);
     }
 
-   public void Damage(int dmg)
+   public void Damage(int dmg, int hitTankIndex)
     {
         health -= dmg;
-        Debug.Log("Me Dieron" + health);
+        
         if(health<=0)
         {
-            
-            gameObject.SetActive(false);
-            
+            GameManager.instance.UpdateKills(hitTankIndex);
+            health = 5;
+            ReturnToInitialPos();
+
         }
     }
 }
